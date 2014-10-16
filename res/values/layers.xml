@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="onlineLayers">
+        <item>底图</item>
+        <item>3D地图</item>
+        <item>影像</item>
+        <item>1948年影像</item>
+        <item>1979年影像</item>
+    </string-array >
+    
+    <string-array name="offlineLayers">
+        <item>大比例尺</item>
+        <item>离线影像</item>
+    </string-array >
+    
+    <string-array name="baseMapURLs">
+        <item>http://mape.shanghai-map.net/ArcGIS/rest/services/SHMAP_D/MapServer</item>
+        <item>http://mape.shanghai-map.net/ArcGIS/rest/services/SHMAP_DZJ/MapServer</item>
+    </string-array>
+    
+    <string-array name="base3DMapURLs">
+        <item>http://mape.shanghai-map.net/ArcGIS/rest/services/253D/MapServer</item>
+    </string-array>
+    
+    <string-array name="imageMapURLs">
+        <item>http://mape.shanghai-map.net/ArcGIS/rest/services/SHMAP_IMAGE/MapServer</item>
+        <item>http://mape.shanghai-map.net/ArcGIS/rest/services/SHMAP_DZJ/MapServer</item>
+    </string-array>
+    
+    <string-array name="image1948MapURLs">
+        <item>http://mape.shanghai-map.net/ArcGIS/rest/services/1948-yx/MapServer</item>
+        <item>http://mape.shanghai-map.net/ArcGIS/rest/services/1948-yx-zj/MapServer</item>
+    </string-array>
+    
+    <string-array name="image1979MapURLs">
+        <item>http://mape.shanghai-map.net/ArcGIS/rest/services/1979-yx/MapServer</item>
+        <item>http://mape.shanghai-map.net/ArcGIS/rest/services/1979-yx-zj/MapServer</item>
+    </string-array>
+    
+    <string-array name="offlineScaleMapURLs">
+        <item>storage/emulated/0/OfflineDataForAndroid</item>
+    </string-array>
+    
+    <string-array name="offlineImageMapURLs">
+        <item>storage/emulated/0/OfflineDataForAndroid</item>
+    </string-array>
+
+</resources>

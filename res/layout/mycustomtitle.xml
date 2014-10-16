@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="fill_horizontal"
+    android:orientation="horizontal" >
+      
+        <TextView
+            android:id="@+id/header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/app_name"
+            android:textColor="#FF69B4"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        
+        <Spinner
+            android:id="@+id/layerControl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:spinnerMode="dropdown" />
+        
+        <Switch
+            android:id="@+id/switchOfflineAndOnline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/layerControl"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:checked="true"
+            android:textOff="离线"
+            android:textOn="在线" />               
+        
+        <Spinner
+            android:id="@+id/editType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:spinnerMode="dropdown" />
+        
+        <Switch
+            android:id="@+id/switchEditing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/editType"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:checked="true"
+            android:textOff="编辑"
+            android:textOn="浏览" />
+        
+</RelativeLayout>
