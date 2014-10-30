@@ -47,7 +47,7 @@ jbyteArray jnichartojbyteArray( JNIEnv* pEnv , unsigned char* pData ,int size)
  * Method:    decrypt
  * Signature: ([BI)[B
  */
-JNIEXPORT jbyteArray JNICALL Java_cnsh_Encrypt_decrypt
+JNIEXPORT jbyteArray JNICALL Java_cn_shsmi_map_Encrypt_decrypt
   (JNIEnv *env, jclass, jbyteArray iconData, jint size)
 {
 	unsigned char *pBuf = NULL ;

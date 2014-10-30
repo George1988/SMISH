@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import cnsh.Encrypt;
+
+import cn.shsmi.map.Encrypt;
+
 import com.esri.android.map.TiledServiceLayer;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Point;

@@ -34,16 +34,24 @@
             android:layout_toLeftOf="@id/layerControl"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:checked="true"
+            android:checked="false"
             android:textOff="离线"
-            android:textOn="在线" />               
+            android:textOn="在线" />      
+            
+        <Spinner
+            android:id="@+id/editMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:spinnerMode="dropdown" />
         
         <Spinner
             android:id="@+id/editType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
+            android:layout_toRightOf="@id/editMode"
             android:spinnerMode="dropdown" />
         
         <Switch

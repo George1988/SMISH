@@ -1,4 +1,4 @@
-package cnsh;
+package cn.shsmi.map;
 
 import java.lang.System;
 

@@ -1,8 +1,9 @@
 package cn.shsmi;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.util.AttributeSet;
+import android.view.DragEvent;
+import android.view.MotionEvent;
 
 import com.esri.android.map.Layer;
 import com.esri.android.map.MapView;
@@ -22,6 +23,7 @@ public class SMIMapView extends MapView {
 		super(context, attrs);
 		//注册ArcGIS
         ArcGISRuntime.setClientId("NyRku1gZ5K5voV0I");
+        //LicenseLevel licenseLevel = ArcGISRuntime.License.getLicenseLevel();
 	}
 
 	public SMIMapView(Context context, AttributeSet attrs, int defStyle) {
@@ -46,10 +48,47 @@ public class SMIMapView extends MapView {
 	 * @return 返回值为底图图层的索引值，负数则表示添加失败
 	 */
 	public long LoadBaseMap(String map_resource_path) {
+		return LoadBaseMap(map_resource_path, this.getLayers().length);
+	}
+	
+	/**
+	 * 载入政务地图
+	 * @param map_resource_path 底图数据路径
+	 * @param index 添加图层到指定的索引值
+	 * @return 返回值为底图图层的索引值，负数则表示添加失败
+	 */
+	public long LoadBaseMap(String map_resource_path, int index) {
 		try {
 			CZTiledLayer baseLayer = new CZTiledLayer(map_resource_path);
-			this.addLayer(baseLayer);
+			this.addLayer(baseLayer, index);
 			return baseLayer.getID();
+		} catch (Exception e) {
+			return -1;
+		}
+	}
+	
+	/**
+	 * 载入AcrGIS在线地图服务
+	 * @param map_resource_url AcrGIS地图服务网址
+	 * @param map_resource_type ArcGIS动态地图服务取值为（DYNAMIC）；切片地图服务取值为（TILED）
+	 * @param index 添加图层到指定的索引值
+	 * @return 返回值为地图服务的索引值，负数则表示添加失败
+	 */
+	public long LoadOnlineMap(String map_resource_url, MapResourceType map_resource_type, int index) {
+		try {
+			Layer mapLayer = null;
+			switch (map_resource_type) {
+			case DYNAMIC:
+				mapLayer = new ArcGISDynamicMapServiceLayer(map_resource_url);
+				this.addLayer(mapLayer, index);
+				return mapLayer.getID();
+			case TILED:
+				mapLayer = new ArcGISTiledMapServiceLayer(map_resource_url);
+				this.addLayer(mapLayer, index);
+				return mapLayer.getID();
+			default:
+				return -1;
+			}
 		} catch (Exception e) {
 			return -1;
 		}
@@ -62,23 +101,7 @@ public class SMIMapView extends MapView {
 	 * @return 返回值为地图服务的索引值，负数则表示添加失败
 	 */
 	public long LoadOnlineMap(String map_resource_url, MapResourceType map_resource_type) {
-		try {
-			Layer mapLayer = null;
-			switch (map_resource_type) {
-			case DYNAMIC:
-				mapLayer = new ArcGISDynamicMapServiceLayer(map_resource_url);
-				this.addLayer(mapLayer);
-				return mapLayer.getID();
-			case TILED:
-				mapLayer = new ArcGISTiledMapServiceLayer(map_resource_url);
-				this.addLayer(mapLayer);
-				return mapLayer.getID();
-			default:
-				return -1;
-			}
-		} catch (Exception e) {
-			return -1;
-		}
+		return LoadOnlineMap(map_resource_url, map_resource_type, this.getLayers().length);
 	}
 	
 	/**
@@ -93,6 +116,4 @@ public class SMIMapView extends MapView {
 		}
 	}
 	
-	
-
 }

@@ -4,4 +4,9 @@
     <string name="point">点</string>
     <string name="line">线</string>
     <string name="polygon">面</string>
+    <string name="curve">箭头</string>
+    <string name="add">添加</string>
+    <string name="delete">删除</string>
+    <string name="update">更新</string>
+    <string name="select">选择</string>
 </resources>
