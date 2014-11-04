@@ -1,52 +1,32 @@
 package cn.shsmi;
 
 import com.esri.android.map.Callout;
-import com.esri.android.map.FeatureLayer;
-import com.esri.android.map.Layer;
 import com.esri.android.map.MapOnTouchListener;
 import com.esri.android.map.ags.ArcGISDynamicMapServiceLayer;
-import com.esri.android.map.ags.ArcGISFeatureLayer;
-import com.esri.android.map.ags.ArcGISFeatureLayer.MODE;
-import com.esri.android.map.event.OnSingleTapListener;
-import com.esri.android.map.popup.ArcGISAttributeView;
-import com.esri.android.map.popup.ArcGISAttributesAdapter;
-import com.esri.android.map.popup.Popup;
-import com.esri.android.map.popup.PopupContainerView;
-import com.esri.android.map.popup.PopupValid;
 import com.esri.core.geometry.Geometry;
 import com.esri.core.geometry.Geometry.Type;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Point;
-import com.esri.core.internal.tasks.ags.aa;
-import com.esri.core.map.Feature;
 import com.esri.core.map.FeatureSet;
 import com.esri.core.map.Graphic;
-import com.esri.core.map.popup.PopupInfo;
-import com.esri.core.tasks.ags.find.FindParameters;
-import com.esri.core.tasks.ags.find.FindResult;
-import com.esri.core.tasks.ags.find.FindTask;
+import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.esri.core.tasks.ags.query.Query;
 import com.esri.core.tasks.ags.query.QueryTask;
-import com.esri.core.tasks.query.QueryParameters;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import cn.shsmi.CZGraLayer.EditingMode;
 import cn.shsmi.SMIMapView.MapResourceType;
-import android.R.integer;
 import android.app.Activity;
-import android.content.DialogInterface.OnClickListener;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.DropBoxManager.Entry;
-import android.preference.EditTextPreference;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -58,12 +38,16 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SearchView.OnCloseListener;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+
+import org.ksoap2.SoapEnvelope;  
+import org.ksoap2.serialization.SoapObject;  
+import org.ksoap2.serialization.SoapSerializationEnvelope;  
+import org.ksoap2.transport.HttpTransportSE;
 
 
 public class SMISHActivity extends Activity {	
@@ -286,8 +270,7 @@ public class SMISHActivity extends Activity {
 		Button searchButton = (Button)findViewById(R.id.searchButton);
 		android.view.View.OnClickListener aaaClickListener =  new android.view.View.OnClickListener() {	
 			public void onClick(View v) {
-				new RunQueryLocalFeatureLayerTask()
-				.execute(editText);
+				new RunQueryLocalFeatureLayerTask3().execute(editText);
 			}
 		};
 		searchButton.setOnClickListener(aaaClickListener);
@@ -489,14 +472,14 @@ public class SMISHActivity extends Activity {
 
         Callout callout = mMapView.getCallout();
         if (showGraphic == null) {
-			callout.show(mMapView.toMapPoint(new Point(300.0, 300.0)), resultTextView);
+			//callout.show(mMapView.toMapPoint(new Point(300.0, 300.0)), resultTextView);
 		} else {
 			callout.show((Point)showGraphic.getGeometry(), resultTextView);
 			mMapView.centerAt((Point)showGraphic.getGeometry(), true);
 		}
 	}
 	
-class RunQueryLocalFeatureLayerTask2 extends AsyncTask<Envelope, Void,List<Geometry>>{
+class RunQueryLocalFeatureLayerTask2 extends AsyncTask<Envelope, Void, List<Geometry>>{
 		
 		class czRunnable implements Runnable {
 
@@ -541,5 +524,155 @@ class RunQueryLocalFeatureLayerTask2 extends AsyncTask<Envelope, Void,List<Geome
 	   return null;
 	  }
 	}
+
+
+
+/** 
+ * 手机号段归属地查询 
+ *  
+ * @param phoneSec 手机号段 
+ */  
+public void getRemoteInfo(EditText editText) {  
+    // 命名空间  
+    String nameSpace = "http://WebXml.com.cn/";  
+    // 调用的方法名称  
+    String methodName = "getMobileCodeInfo";  
+    // EndPoint  
+    String endPoint = "http://webservice.webxml.com.cn/WebServices/MobileCodeWS.asmx";  
+    // SOAP Action  
+    String soapAction = "http://WebXml.com.cn/getMobileCodeInfo";  
+
+    // 指定WebService的命名空间和调用的方法名  
+    SoapObject rpc = new SoapObject(nameSpace, methodName);  
+
+    // 设置需调用WebService接口需要传入的两个参数mobileCode、userId  
+    rpc.addProperty("mobileCode", "13761786610");  
+    rpc.addProperty("userId", "");  
+
+    // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本  
+    SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);  
+
+    envelope.bodyOut = rpc;  
+    // 设置是否调用的是dotNet开发的WebService  
+    envelope.dotNet = true;  
+    // 等价于envelope.bodyOut = rpc;  
+    envelope.setOutputSoapObject(rpc);  
+
+    HttpTransportSE transport = new HttpTransportSE(endPoint);  
+    try {  
+        // 调用WebService  
+        transport.call(null, envelope);  
+    } catch (Exception e) {  
+        e.printStackTrace();  
+        return;
+    }  
+
+    // 获取返回的数据  
+    SoapObject object = (SoapObject) envelope.bodyIn;  
+    // 获取返回的结果  
+    String result = object.getProperty(0).toString();  
+
+    // 将WebService返回的结果显示在TextView中  
+    editText.setText(result);  
+} 
+
+class RunQueryLocalFeatureLayerTask3 extends AsyncTask<EditText, Void, Void>{
+	
+	class czRunnable implements Runnable {
+
+		private Graphic gggGraphic;
+		public czRunnable(Graphic gra) {
+			gggGraphic = gra;
+		}
+		public void run() {
+			createPopupView(gggGraphic);
+		}
+		
+	}
+
+@Override
+protected Void doInBackground(EditText... params) {
+
+   try {  
+	   	// 命名空间  
+	    String nameSpace = "http://tempuri.org/";  
+	    // 调用的方法名称  
+	    String methodName = "AddressSearch";  
+	    // EndPoint  
+	    String endPoint = "http://202.136.213.6/XF_Tablet/service1.asmx";  
+	    // SOAP Action  
+	    String soapAction = "http://tempuri.org/AddressSearch";  
+
+	    // 指定WebService的命名空间和调用的方法名  
+	    SoapObject rpc = new SoapObject(nameSpace, methodName);  
+
+	    // 设置需调用WebService接口需要传入的两个参数mobileCode、userId  
+	    //rpc.addProperty("mobileCode", params[0].getText()); 
+	    rpc.addProperty("sAddress", params[0].getText().toString());
+	    rpc.addProperty("m_len", 1);
+
+	    // 生成调用WebService方法的SOAP请求信息,并指定SOAP的版本
+	    SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);  
+
+	    envelope.bodyOut = rpc;
+	    // 设置是否调用的是dotNet开发的WebService
+	    envelope.dotNet = true;
+	    // 等价于envelope.bodyOut = rpc;
+	    envelope.setOutputSoapObject(rpc);
+	    
+	    HttpTransportSE transport = new HttpTransportSE(endPoint);
+	    transport.call(soapAction, envelope);    
+
+	    // 获取返回的数据  
+	    SoapObject object = (SoapObject) envelope.getResponse();
+	    // 获取返回的结果
+	    
+	    Point geo = new Point(0.0, 0.0);
+	    Map<String, Object> attributes = new TreeMap<String, Object>();
+	    
+	    if (object.hasProperty("addressR")) {
+			object = (SoapObject)object.getProperty(0);
+			if (object.hasProperty("m_POIName")) {
+				attributes.put("m_POIName", object.getProperty("m_POIName"));
+			}
+			if (object.hasProperty("m_RoadName")) {
+				attributes.put("m_RoadName", object.getProperty("m_RoadName"));
+			}
+			if (object.hasProperty("m_DoorPlate")) {
+				attributes.put("m_DoorPlate", object.getProperty("m_DoorPlate"));
+			}
+			if (object.hasProperty("m_MatchAccuracy")) {
+				attributes.put("m_MatchAccuracy", object.getProperty("m_MatchAccuracy"));
+			}
+			if (object.hasProperty("m_MatchMemo")) {
+				attributes.put("m_MatchMemo", object.getProperty("m_MatchMemo"));
+			}
+			if (object.hasProperty("m_bline")) {
+				attributes.put("m_bline", object.getProperty("m_bline"));
+			}
+			if (object.hasProperty("m_class")) {
+				attributes.put("m_class", object.getProperty("m_class"));
+			}
+			if (object.hasProperty("m_Lon")) {
+				geo.setX(Double.valueOf(object.getProperty("m_Lon").toString()));
+			}
+			if (object.hasProperty("m_Lat")) {
+				geo.setY(Double.valueOf(object.getProperty("m_Lat").toString()));
+			}			
+		}
+	    
+	    Graphic result = new Graphic(geo, 
+	    		new SimpleMarkerSymbol(Color.BLUE, 10, com.esri.core.symbol.SimpleMarkerSymbol.STYLE.CIRCLE), 
+	    		attributes);
+	    
+	    runOnUiThread(new czRunnable(result));
+
+   } catch (Exception e) {    
+	   e.printStackTrace();  
+   }
+   return null; 
+   
+  }
+}
 	
 }
